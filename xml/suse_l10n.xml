@@ -35,7 +35,8 @@
   <command>locale</command> man page).
  </para>
 
- <variablelist>
+ <variablelist xml:id="vl.suse.l10n.variables">
+  <title>List of Categories</title>
   <varlistentry>
    <term><systemitem>RC_LC_MESSAGES</systemitem>,
     <systemitem>RC_LC_CTYPE</systemitem>,
@@ -79,8 +80,9 @@
    </term>
    <listitem>
     <para>
-     A <literal>yes</literal> or <literal>no</literal> variable. If set to
-     <literal>no</literal>, <systemitem class="username">root</systemitem>
+     A variable which can be set to <literal>yes</literal> or
+     <literal>ctype</literal> (default). If set to
+     <literal>ctype</literal>, <systemitem class="username">root</systemitem>
      always works in the POSIX environment.
     </para>
    </listitem>
@@ -93,9 +95,70 @@
   The individual components are connected by special characters:
  </para>
 
-<screen>
-  LANG=&lt;language&gt;[[_&lt;COUNTRY&gt;].&lt;Encoding&gt;[@&lt;Modifier&gt;]]
-</screen>
+<screen>LANG=&lt;language&gt;[[_&lt;COUNTRY&gt;].&lt;Encoding&gt;[@&lt;Modifier&gt;]]</screen>
+
+ <sect2 xml:id="sec.suse.l10n.settings">
+  <title>System Wide Locale Settings</title>
+  <para>
+   Since &sls; 15, &systemd; reads <filename>/etc/locale.conf</filename>
+   at early boot. The locale settings configured in this file are
+   inherited by every service or user, unless there are individual
+   settings.
+  </para>
+
+  <para>To set the system-wide locale, you could either:</para>
+
+  <itemizedlist>
+     <listitem>
+      <para>
+       Write your settings in <filename>/etc/locale.conf</filename>.
+       Each line is a environment-like variable assignment (see <xref
+        linkend="vl.suse.l10n.variables"/> for a list of variables).
+       For example, to set the language to German in Germany, use:
+      </para>
+      <screen>LANG=de_DE.UTF-8</screen>
+      <para>It is possible to further add variables in another line, like
+       <varname>LC_COLLATE</varname>, to specify a different sorting
+       from the main language in <varname>LANG</varname>.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Use the command <command>localectl</command>. For example, to set the
+       language to German in Germany, use:
+      </para>
+      <screen>&prompt.root;<command
+>localectl</command> set-locale LANG=de_DE.UTF-8</screen>
+      <para>Same here, you can also specify additional variables after the
+      <command>localectl set-locale</command> command.</para>
+     </listitem>
+     <listitem>
+      <para>
+        Write <varname>ROOT_USES_LANG</varname> in
+       <filename>/etc/sysconfig/language</filename> if
+       <varname>LANG</varname> was not already
+       configured in <filename>/etc/locale.conf</filename>.
+      </para>
+     </listitem>
+    </itemizedlist>
+
+<para>
+   However, &systemd; does not read its settings from
+   <filename>/etc/sysconfig/language</filename>,
+   <filename>/etc/sysconfig/keyboard</filename>, and
+   <filename>/etc/sysconfig/console</filename> anymore.
+     All variables defined in <filename>/etc/sysconfig/language</filename>
+     will still be used to override the system-wide locale and to define a
+     different locale settings for users's shells (see <xref
+      linkend="sec.suse.l10n.examples"/>).
+    </para>
+  <para>
+   To keep backward compatibility with old systems during the
+   update of the systemd package, all variables mentioned will be migrated
+   from sysconfig to their final destinations if they are not already defined
+   there.
+  </para>
+ </sect2>
 
  <sect2 xml:id="sec.suse.l10n.examples">
   <title>Some Examples</title>
@@ -131,9 +194,7 @@ localedef -i es_ES@euro -f UTF-8 es_ES@euro.UTF-8
 -->
   <remark role="trans">Change the description file in the previous para and the
    following screen to something appropriate for your language.</remark>
-<screen>
-localedef -i en_US -f UTF-8 en_US.UTF-8
-</screen>
+<screen>localedef -i en_US -f UTF-8 en_US.UTF-8</screen>
   <variablelist>
    <varlistentry>
     <term>
@@ -238,8 +299,7 @@ Spanish:  <systemitem>LANG=es_ES@euro</systemitem>
    <literal>LANG</literal> instead of <literal>RC_LANG</literal>:
   </para>
 <screen>LANG=cs_CZ.UTF-8
-LC_COLLATE=C
-</screen>
+LC_COLLATE=C</screen>
  </sect2>
 
  <sect2 xml:id="sec.suse.l10n.fallback">
