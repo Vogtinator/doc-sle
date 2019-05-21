@@ -106,7 +106,16 @@
    inherited by every service or user, unless there are individual
    settings.
   </para>
-
+  <para>
+   However, &systemd; does not read its settings from
+   <filename>/etc/sysconfig/language</filename>,
+   <filename>/etc/sysconfig/keyboard</filename>, and
+   <filename>/etc/sysconfig/console</filename> anymore.
+   All variables defined in <filename>/etc/sysconfig/language</filename>
+   will still be used to override the system-wide locale and to define a
+   different locale settings for users's shells (see <xref
+    linkend="sec.suse.l10n.examples"/>).
+  </para>
   <para>To set the system-wide locale, you could either:</para>
 
   <itemizedlist>
@@ -135,26 +144,8 @@
       <para>Same here, you can also specify additional variables after the
       <command>localectl set-locale</command> command.</para>
      </listitem>
-     <listitem>
-      <para>
-        Write <varname>ROOT_USES_LANG</varname> in
-       <filename>/etc/sysconfig/language</filename> if
-       <varname>LANG</varname> was not already
-       configured in <filename>/etc/locale.conf</filename>.
-      </para>
-     </listitem>
     </itemizedlist>
 
-<para>
-   However, &systemd; does not read its settings from
-   <filename>/etc/sysconfig/language</filename>,
-   <filename>/etc/sysconfig/keyboard</filename>, and
-   <filename>/etc/sysconfig/console</filename> anymore.
-     All variables defined in <filename>/etc/sysconfig/language</filename>
-     will still be used to override the system-wide locale and to define a
-     different locale settings for users's shells (see <xref
-      linkend="sec.suse.l10n.examples"/>).
-    </para>
   <para>
    To keep backward compatibility with old systems during the
    update of the systemd package, all variables mentioned will be migrated
@@ -164,7 +155,11 @@
  </sect2>
 
  <sect2 xml:id="sec.suse.l10n.examples">
-  <title>Some Examples</title>
+  <title>Generating Locales</title>
+  <remark>toms 2019-05-21: This section should be restructured as
+  it not completely deals with generating locales.
+  Postponed to a later point.
+  </remark>
   <para>
    You should always set the language and country codes together. Language
    settings follow the standard ISO&nbsp;639 available at
