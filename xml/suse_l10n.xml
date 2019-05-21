@@ -36,7 +36,7 @@
  </para>
 
  <variablelist xml:id="vl.suse.l10n.variables">
-  <title>List of Categories</title>
+  <title>List of Variables</title>
   <varlistentry>
    <term><systemitem>RC_LC_MESSAGES</systemitem>,
     <systemitem>RC_LC_CTYPE</systemitem>,
@@ -80,10 +80,11 @@
    </term>
    <listitem>
     <para>
-     A variable which can be set to <literal>yes</literal> or
+     This variable can be set to <literal>yes</literal> or
      <literal>ctype</literal> (default). If set to
-     <literal>ctype</literal>, <systemitem class="username">root</systemitem>
-     always works in the POSIX environment.
+     <literal>yes</literal>, <systemitem class="username">root</systemitem>
+      uses language and country-specific settings, otherwise the system administrator
+      always works in a POSIX environment.
     </para>
    </listitem>
   </varlistentry>
@@ -92,7 +93,7 @@
  <para>
   The variables can be set with the &yast; sysconfig editor. The value of such
   a variable contains the language code, country code, encoding and modifier.
-  The individual components are connected by special characters:
+   The individual components are joined by special characters:
  </para>
 
 <screen>LANG=&lt;language&gt;[[_&lt;COUNTRY&gt;].&lt;Encoding&gt;[@&lt;Modifier&gt;]]</screen>
@@ -100,7 +101,7 @@
  <sect2 xml:id="sec.suse.l10n.settings">
   <title>System Wide Locale Settings</title>
   <para>
-   Since &sls; 15, &systemd; reads <filename>/etc/locale.conf</filename>
+   As of &sls; 15, &systemd; reads <filename>/etc/locale.conf</filename>
    at early boot. The locale settings configured in this file are
    inherited by every service or user, unless there are individual
    settings.
@@ -117,7 +118,9 @@
        For example, to set the language to German in Germany, use:
       </para>
       <screen>LANG=de_DE.UTF-8</screen>
-      <para>It is possible to further add variables in another line, like
+      <para>
+       To fine-tune the settings, you can add additional variables,
+       one variable per line.
        <varname>LC_COLLATE</varname>, to specify a different sorting
        from the main language in <varname>LANG</varname>.
       </para>
